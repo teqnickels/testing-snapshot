@@ -4,7 +4,7 @@ const should = chai.should()
 const app = require('../../../src/server.js')
 const expect = chai.expect
 const { clearTable, reloadData, resetDb } = require('../../helpers/db.js')
-const { findAll, create, findById } = require('../../../src/models/db/contacts')
+const { findAll, create, findById, destroy } = require('../../../src/models/db/contacts')
 var chaiAsPromised = require('chai-as-promised')
 
 chai.use(chaiHttp);
@@ -33,10 +33,20 @@ describe('Integration tests database functions', () => {
     })
   })
 
-  it('Returns the contact matching the ID given', () => {
+  it('Returns the contact matching the id given', () => {
     return findById('1')
     .then((results) => {
       expect(results.first_name).to.eql('Jared')
+    })
+  })
+
+  it('Deletes row in contacts that has the id given', () => {
+    return destroy('1')
+    .then(() => {
+      return findAll() 
+      .then((results) => {
+        expect(results.length).to.eql(2)
+      })
     })
   })
 
