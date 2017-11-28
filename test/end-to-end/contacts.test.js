@@ -1,6 +1,5 @@
 const chai = require('chai')
 const chaiHttp = require('chai-http');
-const should = chai.should()
 const app = require('../../src/server.js')
 const expect = chai.expect
 const { clearTable, reloadData, resetDb } = require('../helpers/db.js')
@@ -8,38 +7,40 @@ const { create } = require('../../src/models/db/contacts')
 var chaiAsPromised = require('chai-as-promised')
 
 chai.use(chaiHttp);
-chai.use(chaiAsPromised);
 
-it('responds 200 when requested', () => {
-   return chai.request(app)
-    .get('/')
-    .end( (error, response) => {
-      expect(error).to.be.null; 
-      expect(response).to.have.status(200)
-    })
+describe('end-to-end testing response status of requested pages', () => {
+  it('responds 200 when requested', () => {
+    return chai.request(app)
+      .get('/')
+      .end( (error, response) => {
+        expect(error).to.be.null; 
+        expect(response).to.have.status(200)
+      })
+  })
+
+  it('responds 200 when requested', () => {
+    return chai.request(app)
+      .get('/contacts/new')
+      .end( (error, response) => {
+        expect(error).to.be.null;
+        expect(response).to.have.status(200)
+      })
+  })
+
+
+  it('saves new contact to database', () => {
+    return chai.request(app)
+      .post('/contacts')
+      .type('form')
+      .send({ first_name: 'THIS IS FROM THE TEST', last_name: '785' })
+      .then( (response) => {
+        expect(response.text).to.include('THIS IS FROM THE TEST')
+        expect(response).to.have.status(200)
+        
+      })
+  })
+
 })
-
-it('responds 200 when requested', () => {
-   return chai.request(app)
-    .get('/contacts/new')
-    .end( (error, response) => {
-      expect(error).to.be.null;
-      expect(response).to.have.status(200)
-    })
-})
-
-it('saves new contact to database', () => {
-  return chai.request(app)
-    .post('/contacts')
-    .type('form')
-    .send({ first_name: 'THIS IS FROM THE TEST', last_name: '785' })
-    .then( (response) => {
-      expect(response.text).to.include('THIS IS FROM THE TEST')
-      expect(response).to.have.status(200)
-      
-    })
-})
-
 
 describe('end-to-end tests that rely on seeded database', () => {
   beforeEach('reset the database', () => {
