@@ -4,7 +4,7 @@ const should = chai.should()
 const app = require('../../../src/server.js')
 const expect = chai.expect
 const { clearTable, reloadData, resetDb } = require('../../helpers/db.js')
-const { findAll, create, findById, destroy } = require('../../../src/models/db/contacts')
+const { findAll, create, findById, destroy, search } = require('../../../src/models/db/contacts')
 var chaiAsPromised = require('chai-as-promised')
 
 chai.use(chaiHttp);
@@ -47,6 +47,13 @@ describe('Integration tests database functions', () => {
       .then((results) => {
         expect(results.length).to.eql(2)
       })
+    })
+  })
+
+  it('Returns relevant contact based on search query given', ()=> {
+    return search('James')
+    .then((results) => {
+      expect(results[0].first_name).to.eql('NeEddra')
     })
   })
 
