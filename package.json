@@ -9,7 +9,7 @@
     "db:reset": "dropdb contacts_development && createdb contacts_development && npm run load_schema",
     "load_schema": "psql -d contacts_development < src/models/db/schema/schema.sql",
     "load_contacts": "psql -d contacts_development < test/seed/contacts.sql",
-    "test": "NODE_ENV=test mocha  --exit test/**/*.test.js "
+    "test": "NODE_ENV=test mocha --recursive --exit test/ "
   },
   "keywords": [],
   "author": "",
