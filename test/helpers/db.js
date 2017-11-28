@@ -15,7 +15,7 @@ const reloadData = () => {
 const resetDb = () => {
   return clearTable()
     .then(() => {
-      reloadData()
+      return reloadData()
     })
     .catch(console.error)
 }
