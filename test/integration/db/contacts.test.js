@@ -4,7 +4,7 @@ const should = chai.should()
 const app = require('../../../src/server.js')
 const expect = chai.expect
 const { clearTable, reloadData, resetDb } = require('../../helpers/db.js')
-const { findAll, create } = require('../../../src/models/db/contacts')
+const { findAll, create, findById } = require('../../../src/models/db/contacts')
 var chaiAsPromised = require('chai-as-promised')
 
 chai.use(chaiHttp);
@@ -27,10 +27,16 @@ describe('Integration tests database functions', () => {
     })
   })
   it('Returns all contacts from the database', () => {
- //THE PROBLEM IS THAT THE RESET IS NOT FINISHING BEFORE FINDALL STARTS
     return findAll()
     .then((results) => {
       expect(results.length).to.eql(3)
+    })
+  })
+
+  it('Returns the contact matching the ID given', () => {
+    return findById('1')
+    .then((results) => {
+      expect(results.first_name).to.eql('Jared')
     })
   })
 
