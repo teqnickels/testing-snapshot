@@ -11,18 +11,27 @@ chai.use(chaiHttp);
 
 describe('Integration tests database functions', () => {
   beforeEach('Reset the database', () => {
-    resetDb()
+    return resetDb()
   })
-  it.only('Creates a new contact in the database', () => {
+
+  it('Creates a new contact in the database', () => {
     const contact = {
       first_name: 'CeeLo',
       last_name: 'Green'
     }
-   return create(contact).then(()=> {
-     findAll()
-       .then((results) => {
-         expect(results.length).to.be(4)
-        })
+    return create(contact).then(()=> {
+       return findAll()
+      .then((results) => {
+        expect(results.length).to.eql(4)
+      })
     })
   })
+  it('Returns all contacts from the database', () => {
+ //THE PROBLEM IS THAT THE RESET IS NOT FINISHING BEFORE FINDALL STARTS
+    return findAll()
+    .then((results) => {
+      expect(results.length).to.eql(3)
+    })
+  })
+
 })  
