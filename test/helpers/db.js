@@ -3,14 +3,14 @@ const db = require('../../src/models/db/db')
 const clearTable = () => {
   return db.none('TRUNCATE contacts RESTART IDENTITY;')
     .then( () => {
-  console.log('The table has been reset')
+  // console.log('The table has been reset')
   })
 }
 
 const reloadData = () => {
   return db.any(`INSERT INTO contacts (first_name, last_name) VALUES ('Jared', 'Grippe'), ('Tanner', 'Welsh'), ('NeEddra', 'James');`)
     .then((result) => {
-      console.log('The data has been reset')
+      // console.log('The data has been reset')
     })
 }
 
