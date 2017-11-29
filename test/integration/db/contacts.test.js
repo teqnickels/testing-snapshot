@@ -1,11 +1,9 @@
 const chai = require('chai')
 const chaiHttp = require('chai-http');
-const should = chai.should()
-const app = require('../../../src/server.js')
 const expect = chai.expect
+const app = require('../../../src/server.js')
 const { clearTable, reloadData, resetDb } = require('../../helpers/db.js')
 const { findAll, create, findById, destroy, search } = require('../../../src/models/db/contacts')
-var chaiAsPromised = require('chai-as-promised')
 
 chai.use(chaiHttp);
 
