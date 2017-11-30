@@ -51,4 +51,14 @@ test.describe('UI tests using a headless browser to confirm UI properties', func
         })
       })
     })
+
+  test.it('Render home page with all contacts', function () {
+    this.timeout(10000)
+      driver.get('http://localhost:3000/')
+      return driver.findElement(By.className('page-column-content')).getText()
+        .then(function (element) {
+          console.log(element)
+          expect(element).to.eql(`Contacts\nJared Grippe\ndelete contact\nTanner Welsh\ndelete contact\nNeEddra James\ndelete contact`)
+      })
+  })
 })
