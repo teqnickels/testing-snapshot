@@ -9,6 +9,11 @@ Webdriver = require('selenium-webdriver')
 const By = Webdriver.By
 
 test.describe('UI tests using a headless browser to confirm UI properties', function() {
+
+  beforeEach('reset the database', () => {
+    return resetDb()
+  })
+
   afterEach('reset the test', function() {
     driver.close();
     driver.quit();
@@ -17,7 +22,8 @@ test.describe('UI tests using a headless browser to confirm UI properties', func
   const driver = new Webdriver.Builder()
     .forBrowser('chrome')
     .build()
-    test.it.only('Render page with form that allows users to create a new contact', function() {
+
+    test.it('Render page with form that allows users to create a new contact', function() {
       this.timeout(10000);
       driver.get('http://localhost:3000/contacts/new')
       return driver.findElement(By.className('new-contact-form'))
@@ -29,4 +35,20 @@ test.describe('UI tests using a headless browser to confirm UI properties', func
       })
     })
 
+    test.it('Render page with new user', function() {
+      this.timeout(10000)
+      return chai.request(app)
+        .post('/contacts')
+        .type('form')
+        .send({first_name: 'NEW CONTACT TEST', last_name: 'NEW CONTACT TEST'})
+      .then(function() {
+        driver.get('http://localhost:3000/contacts/4')
+        return driver.findElement(By.className('page-column-content'))
+        .getText()
+        .then(function(element) {
+          console.log(element)
+          expect(element).to.include('NEW CONTACT TEST NEW CONTACT TEST')
+        })
+      })
+    })
 })
