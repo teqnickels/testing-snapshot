@@ -61,7 +61,7 @@ test.describe('UI tests using a headless browser to confirm UI properties', func
     })
   })
 
-  test.it.only('Check for deleted users from homepage', function () {
+  test.it('Check for deleted users from homepage', function () {
     this.timeout(10000)
     return chai.request(app)
     .delete('/contacts/3')
@@ -73,4 +73,13 @@ test.describe('UI tests using a headless browser to confirm UI properties', func
       })
     })
   })
+
+  test.it('Search should show contacts relevant to query', function () {
+    this.timeout(10000)
+      driver.get('http://localhost:3000/contacts/search?q=James')
+      return driver.findElement(By.className('page-column-content')).getText()
+      .then(function (element) {
+        expect(element).to.eql(`Contacts\nNeEddra James\ndelete contact`)
+      })
+    })
 })
