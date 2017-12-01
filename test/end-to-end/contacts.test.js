@@ -4,7 +4,6 @@ const app = require('../../src/server.js')
 const expect = chai.expect
 const { clearTable, reloadData, resetDb } = require('../helpers/db.js')
 const { create } = require('../../src/models/db/contacts')
-var chaiAsPromised = require('chai-as-promised')
 
 chai.use(chaiHttp);
 
