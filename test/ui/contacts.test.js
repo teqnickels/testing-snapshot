@@ -41,24 +41,36 @@ test.describe('UI tests using a headless browser to confirm UI properties', func
         .post('/contacts')
         .type('form')
         .send({first_name: 'NEW CONTACT TEST', last_name: 'NEW CONTACT TEST'})
-      .then(function() {
-        driver.get('http://localhost:3000/contacts/4')
-        return driver.findElement(By.className('page-column-content'))
-        .getText()
-        .then(function(element) {
-          console.log(element)
-          expect(element).to.include('NEW CONTACT TEST NEW CONTACT TEST')
+        .then(function() {
+          driver.get('http://localhost:3000/contacts/4')
+          return driver.findElement(By.className('page-column-content'))
+          .getText()
+          .then(function(element) {
+            console.log(element)
+            expect(element).to.include('NEW CONTACT TEST NEW CONTACT TEST')
+          })
         })
-      })
     })
 
   test.it('Render home page with all contacts', function () {
     this.timeout(10000)
+    driver.get('http://localhost:3000/')
+    return driver.findElement(By.className('page-column-content')).getText()
+      .then(function (element) {
+        expect(element).to.eql(`Contacts\nJared Grippe\ndelete contact\nTanner Welsh\ndelete contact\nNeEddra James\ndelete contact`)
+    })
+  })
+
+  test.it.only('Check for deleted users from homepage', function () {
+    this.timeout(10000)
+    return chai.request(app)
+    .delete('/contacts/3')
+    .then(function(response) {
       driver.get('http://localhost:3000/')
       return driver.findElement(By.className('page-column-content')).getText()
-        .then(function (element) {
-          console.log(element)
-          expect(element).to.eql(`Contacts\nJared Grippe\ndelete contact\nTanner Welsh\ndelete contact\nNeEddra James\ndelete contact`)
+      .then(function (element) {
+        expect(element).to.eql(`Contacts\nJared Grippe\ndelete contact\nTanner Welsh\ndelete contact`)
       })
+    })
   })
 })
